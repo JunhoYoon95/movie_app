@@ -1,84 +1,35 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+// 항상 기억 React는 자동적으로 class component 의 render method를 자동으로 실행한다.
+class App extends React.Component{
+  // React component는 render method를 가지고 있지만, extends from 을 했으니까 render method가 있다.
+  
+  state = {
+    // state는 object이고 component의 data를 넣을 공간이 있고 이 데이터는 변한다.
+    count: 0
+  };
 
-// object의 list를 가졍는거 볼거야. 오직 javascript의 object들만.
-// function component, food component를 동적으로 rendering 할 것이다.
-const foodILike = [
-  {
-    id:1,
-    name: "Kimchi",
-    image:
-    "http://aeriskitchen.com/wp-content/uploads/2008/09/kimchi_bokkeumbap_02-.jpg"
-  },
-  {
-    id:2,
-    name: "Samgyeopsal",
-    image:
-    "https://3.bp.blogspot.com/-hKwIBxIVcQw/WfsewX3fhJI/AAAAAAAAALk/yHxnxFXcfx4ZKSfHS_RQNKjw3bAC03AnACLcBGAs/s400/DSC07624.jpg",
-    rating:4.3
-  },
-  {
-    id:3,
-    name: "Bibimbap",
-    image:
-    "http://cdn-image.myrecipes.com/sites/default/files/styles/4_3_horizontal_-_1200x900/public/image/recipes/ck/12/03/bibimbop-ck-x.jpg?itok=RoXlp6Xb",
-    rating:3.2
-  },
-  {
-    id:4,
-    name: "Doncasu",
-    image:
-    "https://s3-media3.fl.yelpcdn.com/bphoto/7F9eTTQ_yxaWIRytAu5feA/ls.jpg",
-    rating:2.2
-  },
-  {
-    id:5,
-    name: "Kimbap",
-    image:
-    "http://cdn2.koreanbapsang.com/wp-content/uploads/2012/05/DSC_1238r-e1454170512295.jpg",
-    rating:4.9
+
+  add = () => {
+    console.log("add");
+  };
+
+  minus = () => {
+    console.log("minus");
+  };
+
+  // <button onClick={this.add}> Add </button> 
+  // this.add() 하면 즉시 나타나는 것이고 this.add를 해야 클릭을 하였을 때에만 되는 것이다.
+  render(){
+    return (
+      <div>
+        <h1>The number is: {this.state.count} </h1>
+        <button onClick={this.add}> Add </button>
+        <button onClick={this.minus}> Minus </button>
+      </div>    
+    );
   }
-];
-// react의 모든 요소들은 다르게 보일 필요가 있어. 다 unique 해야 된다.
-
-// application 에서 food component로 정보를 보내고 그런 다음에 food component에서 그 정보를 어떻게 사용하지에 대해서 한다
-function Food({name, picture,rating}) {
-  return(
-    <div>
-      <h2> Junmannn Likes {name}</h2>
-      <h4>rating : {rating} / 5.0</h4>
-      <img src={picture} alt = {name} />
-    </div>
-  );
 }
-
-// 이 부문으로 prop-types를 체크하는거지. 이거는 f12 누르고 comsole에서 확인 가능.
-// 이름은 걍 니 맘대로 정해도 됨. 꼭 prorTypes 아니어도 된다고 그냥 이름이야.
-Food.propTypes = {
-  name: PropTypes.string.isRequired,
-  picture: PropTypes.string.isRequired,
-  rating: PropTypes.number
-};
-
-// component 안에 넣게 되는 것, 그걸 props라고 한다. 그 props가 Food의 첫 argument로 들어가는거지
-function App() {
-  return (
-    <div>
-      {foodILike.map(dish => (
-        <Food 
-          key={dish.id} 
-          name = {dish.name} 
-          picture={dish.image} 
-          rating={dish.rating}/>
-        ))}
-    </div>
-  );
-}
-/* 
-  map은 array 의 각 item 에서 function을 실행하는 array를 가지는 javascript finction이며 
-  그 function의 result를 갖는 array를 나에게 준다
-*/
-// 누군가가 food component로 정보를 보내려고 하면, react는 이 모든 속성을 가져올 것이다
 
 export default App;
