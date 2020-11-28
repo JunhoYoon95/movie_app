@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-
+import Movie from "./Movie";
 
 // 항상 기억 React는 자동적으로 class component 의 render method를 자동으로 실행한다.
 class App extends React.Component {
@@ -10,12 +10,22 @@ class App extends React.Component {
   };
 
   // async : 이 함수가 비동기라는 말. -> 너는 이걸 기다려야해. 라는 말
-  getMovies = async() => {
+  getMovies = async () => {
     // await axios -> axios가 끝날 때까지 기다렸다가 계속 하라는 말임.
-    const movies = await axios.get("https://yts.mx/api/v2/list_movies.json"); // 근데 알아야 할 점 axios.get()은 그렇게 빠르지 않음. 그러면 기다리라는 말을 어떻게 띄워줄 필요가 있겠지
+    const {
+      data: {
+        data: { movies }
+      }
+    } = await axios.get(
+      "https://yts.mx/api/v2/list_movies.json?sort_by=rating");   // API 요청 중 정렬을 하는 API가 있어서 했음
+    // 근데 알아야 할 점 axios.get()은 그렇게 빠르지 않음. 그러면 기다리라는 말을 어떻게 띄워줄 필요가 있겠지
+    //  console.log(movies);  -> 이걸 state 안에다가 넣자
+    //  this.setState({movies:movies})  // movies(setState에서 나온) : movies(axios에서 나온 movies)
+    this.setState({ movies, isLoading: false });  // 하나의 setState에서 2개의 상태를 변경했다.
+
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getMovies();
   }
   // 이번에는 사람들이 일반적으로 javascript에서 data를 fetch 하는 방법인 fetch 사용 방법을 알아볼 것이다.
@@ -26,8 +36,23 @@ class App extends React.Component {
   // 여기의 API를 사용할거니까 일단 가보자
 
   render() {
-    const {isLoading} = this.state;
-    return <div> {isLoading ? "Loading..." : "We are ready"} </div>;
+    const { isLoading, movies } = this.state;
+    return (
+      <div>
+        {isLoading
+          ? "Loading..."
+          : movies.map(movie => (
+            <Movie
+              key={movie.id}
+              id={movie.id}
+              year={movie.year}
+              title={movie.title}
+              summary={movie.summary}
+              poster={movie.medium_cover_image}
+            />
+          ))}
+      </div>
+    );
   }
 
   /*
